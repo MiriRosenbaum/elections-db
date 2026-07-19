@@ -20,11 +20,6 @@
 
 1. `schema.sql` – יוצר את המסד `Elections` ואת כל האובייקטים.
 2. `seed-data.sql` – טוען את נתוני הדוגמה.
-
-   
-1. פתחו את `Elections-db.sql` ב-SQL Server Management Studio (SSMS).
-2. הריצו את הסקריפט על שרת נקי. הוא יוצר את המסד `Elections`, את כל האובייקטים,
-   וטוען את נתוני הדוגמה.
    
 
 הרצה חוזרת דורשת מחיקת המסד קודם: `DROP DATABASE Elections;`
