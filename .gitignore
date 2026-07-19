@@ -1,4 +1,4 @@
-# ===== SQL Server data & backup files (לעולם לא מעלים לגיט) =====
+# ===== SQL Server data & backup files =====
 *.mdf
 *.ldf
 *.ndf

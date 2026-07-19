@@ -1,32 +1,43 @@
 # Elections – מסד נתונים לניהול בחירות
 
-מסד נתונים ב-SQL Server (T-SQL) המדגים ניהול תהליך בחירות: מרשם אוכלוסין,
-רישום הצבעות, קלפיות, מפלגות, וחישוב חלוקת המנדטים (כולל שיטת בדר-עופר).
+מסד נתונים ב-SQL Server (T-SQL) המדגים מערכת לניהול תהליך בחירות: מרשם
+אוכלוסין, רישום הצבעות (כולל מצביעים מיוחדים), קלפיות, מפלגות, וחישוב
+חלוקת המנדטים לפי אחוז חסימה ושיטת בדר-עופר.
 
-## תוכן
+## מבנה הפרויקט
 
-- **טבלאות:** `Parties`, `PollingStations`, `populationRegist`, `Voters`,
-  `specialVoters`, `Votes`
-- **Views:** `SumVotes` (איחוד המצביעים), `checkIfVoted` (סטטוס הצבעה)
-- **פונקציות:** `blockingPercentage`, `mandates1`, `mandate`, `mandates2`,
-  `mandates3` – צינור חישוב המנדטים
-- **פרוצדורות:** `addParty`, `addPollingStation`, `deleteDoubleVotes`,
-  `deleteDoubleVotes1`, `mandates`, `mandatesPartition`, `sendingEmails`
+| קובץ | תיאור |
+|------|-------|
+| `schema.sql` | מבנה המסד: טבלאות, מפתחות זרים, Views, פונקציות ופרוצדורות |
+| `seed-data.sql` | נתוני דוגמה לטעינה (מורצים אחרי `schema.sql`) |
+
+הפרדת המבנה מהנתונים מאפשרת להריץ את הסכימה לבדה, ושומרת על קובץ מבנה
+קריא ותמציתי.
 
 ## הרצה
 
-1. פתחו את `Elections_fixed.sql` ב-SQL Server Management Studio (SSMS).
-2. הריצו את הסקריפט על שרת נקי. הוא יוצר את המסד `Elections`, את כל האובייקטים,
-   וטוען את נתוני הדוגמה.
-3. הרצה חוזרת דורשת מחיקת המסד קודם (`DROP DATABASE Elections`).
+ב-SQL Server Management Studio (SSMS), על שרת נקי, בסדר הזה:
+
+1. `schema.sql` – יוצר את המסד `Elections` ואת כל האובייקטים.
+2. `seed-data.sql` – טוען את נתוני הדוגמה.
+
+הרצה חוזרת דורשת מחיקת המסד קודם: `DROP DATABASE Elections;`
+
+## מה מודגם בפרויקט
+
+- **תכנון סכימה** – 6 טבלאות מנורמלות עם מפתחות ראשיים, אילוצי ייחודיות
+  ומפתחות זרים מלאים ומהימנים (WITH CHECK).
+- **Views** – `SumVotes` (איחוד מצביעים), `checkIfVoted` (סטטוס הצבעה).
+- **צינור חישוב מנדטים** בפונקציות – `blockingPercentage` → `mandates1`
+  → `mandate` (המודד) → `mandates2` (מנדטים מלאים ושארית) → `mandates3`
+  (ממוצע למנדט הבא).
+- **פרוצדורות** – הוספת מפלגה/קלפי, טיפול בהצבעה כפולה, חלוקת עודפי
+  מנדטים בשיטת בדר-עופר (`mandatesPartition`), ושליחת תזכורות במייל.
 
 ## הערות
-
-- הפרוצדורה `sendingEmails` דורשת הגדרת Database Mail ופרופיל מתאים.
 - מספר המושבים לחישוב המנדטים מוגדר כ-25 (זמני; בכנסת אמיתית 120).
-- קיימת רשומה חריגה אחת בנתוני הדוגמה (מצביע שאינו במרשם); ראו הערה בקוד
-  ליד האילוץ `FK_Voters_populationRegist`.
+- הפרוצדורה `sendingEmails` דורשת הגדרת Database Mail ופרופיל מתאים.
 
 ## דרישות
 
-SQL Server 2016 ומעלה (בשל שימוש ב-`DECLARE ... = value` וכו').
+SQL Server 2016 ומעלה.
