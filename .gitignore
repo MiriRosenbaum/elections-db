@@ -1,0 +1,28 @@
+# ===== SQL Server data & backup files (לעולם לא מעלים לגיט) =====
+*.mdf
+*.ldf
+*.ndf
+*.bak
+*.trn
+
+# ===== SSMS / Visual Studio (SSDT) artifacts =====
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.dbmdl
+*.jfm
+*.dtsx.user
+
+# ===== קבצים זמניים של עורכים =====
+*.tmp
+*.swp
+*~
+
+# ===== קבצי מערכת הפעלה =====
+# Windows
+Thumbs.db
+Desktop.ini
+# macOS
+.DS_Store
